@@ -118,6 +118,13 @@
                 lastOperation = operations[operations.length - 1];
             }
 
+            // called when the lastOperation is either multiply or divide
+            // ensures that the running list of operands follows order of operations
+            const combineOperands = () => {
+                operands[operands.length-1] = operate(lastOperation, lastNumber, displayValue);
+                operations.pop();
+            }
+
             numberButtons.forEach((button) => {
                 button.addEventListener("click", populateDisplay);
             });
@@ -130,8 +137,7 @@
                         return;
                     }
                     if (lastOperation === "multiply" || lastOperation === "divide") {
-                        operands[operands.length-1] = operate(lastOperation, lastNumber, displayValue);
-                        operations.pop();
+                        combineOperands();
                     } else operands.push(displayValue);
                     operations.push(button.id);
                     lastNumber = operands[operands.length-1];
@@ -156,8 +162,7 @@
 
             equals.addEventListener("click", () => {
                 if (lastOperation === "multiply" || lastOperation === "divide") {
-                    operands[operands.length-1] = operate(lastOperation, lastNumber, displayValue);
-                    operations.pop();
+                    combineOperands();
                 } else operands.push(displayValue);
                 displayValue = operands.reduce((acc, curr) => {
                     return acc = operate(operations.shift(), acc, curr);
