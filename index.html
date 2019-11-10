@@ -111,7 +111,7 @@
             }
 
             const shortenDecimal = function(n, places) {
-                return Math.round(n * Math.pow(10,places)) / Math.pow(10, places);
+                return Math.round(n * Math.pow(10, places)) / Math.pow(10, places);
             }
 
             const populateDisplay = function() {
@@ -128,30 +128,23 @@
 
             // called when the lastOperation is either multiply or divide
             // ensures that the running list of operands follows order of operations
-            const combineOperands = () => {
+            const combineOperands = function() {
                 operands[operands.length-1] = operate(lastOperation, lastNumber, displayValue);
                 operations.pop();
             }
 
-            numberButtons.forEach((button) => {
-                button.addEventListener("click", populateDisplay);
-            });
-
-            operatorButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    if (lastNumber == displayValue) {
+            const addOperator = function(button) {
+                if (lastNumber == displayValue) {
                         operations.pop();
                         operations.push(button.id);
                         return;
-                    }
-                    if (lastOperation === "multiply" || lastOperation === "divide") {
-                        combineOperands();
-                    } else operands.push(displayValue);
-                    operations.push(button.id);
-                    lastNumber = operands[operands.length-1];
-                    isNewNumber = true;
-                })
-            });
+                }
+                if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
+                else operands.push(displayValue);
+                operations.push(button.id);
+                lastNumber = operands[operands.length-1];
+                isNewNumber = true;
+            }
 
             const reset = function() {
                 if (isNaN(displayValue)) display.textContent = displayValue;
@@ -163,12 +156,16 @@
                 isNewNumber = true;
             }
 
-            clear.addEventListener("click", () => {
-                displayValue = "0";
-                reset();
-            });
+            const operate = function(operator, x, y) {
+                switch (operator) {
+                    case "add": return add(x, y);
+                    case "subtract": return subtract(x, y);
+                    case "multiply": return multiply(x, y);
+                    case "divide": return divide(x, y);
+                }
+            }
 
-            equals.addEventListener("click", () => {
+            const calculate = function() {
                 if (lastOperation === "multiply" || lastOperation === "divide") {
                     combineOperands();
                 } else operands.push(displayValue);
@@ -176,9 +173,9 @@
                     return acc = operate(operations.shift(), acc, curr);
                 });
                 reset();
-            });
+            }
 
-            decimal.addEventListener("click", () => {
+            const addDecimal = function() {
                 if (isNewNumber) {
                     displayValue = "0.";
                     hasDecimal = true;
@@ -189,16 +186,24 @@
                     hasDecimal = true;
                 }
                 display.textContent = displayValue;
+            }
+
+            numberButtons.forEach((button) => {
+                button.addEventListener("click", populateDisplay);
             });
 
-            const operate = function(operator, x, y) {
-                switch (operator) {
-                    case "add": return add(x, y);
-                    case "subtract": return subtract(x, y);
-                    case "multiply": return multiply(x, y);
-                    case "divide": return divide(x, y);
-                }
-            }
+            operatorButtons.forEach((button) => {
+                button.addEventListener("click", () => { addOperator(button); })
+            });
+
+            clear.addEventListener("click", () => {
+                displayValue = "0";
+                reset();
+            });
+
+            equals.addEventListener("click", calculate);
+
+            decimal.addEventListener("click", addDecimal);
         </script>
     </body>
 </html>
