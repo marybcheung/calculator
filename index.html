@@ -12,7 +12,7 @@
             .wrapper {
                 width: 300px;
                 display: grid;
-                grid-template-columns: auto auto auto auto;
+                grid-template-columns: 72px 72px 72px 72px;
                 grid-gap: 5px;
                 margin: 0 auto;
             }
@@ -69,9 +69,10 @@
             <button class="operator" id="subtract">&minus;</button>
             <button class="number" id="zero">0</button>
             <button id="decimal">&sdot;</button>
-            <button id="equals">=</button>
+            <button id="backspace">&#9003</button>
             <button class="operator" id="add">+</button>
             <button id="clear">AC</button>
+            <button id="equals">=</button>
         </div>
         <script>
             const numberButtons = document.querySelectorAll(".number");
@@ -80,7 +81,8 @@
             const display = document.querySelector("#display");
             const clear = document.querySelector("#clear");
             const decimal = document.querySelector("#decimal");
-            const DECIMAL_PLACES = 10;
+            const backspace = document.querySelector("#backspace");
+            const DECIMAL_PLACES = 8;
             let operations = [];
             let operands = [];
             let displayValue = "0";
@@ -105,7 +107,7 @@
                 if (y == 0) {
                     newNumber = true;
                     hasDecimal = false;
-                    return "You can't do that!";
+                    return "ERROR";
                 } 
                 return Number(x) / Number(y);
             }
@@ -115,15 +117,15 @@
             }
 
             const populateDisplay = function() {
-                if (displayValue.toString() === "0" && this.id === "zero") return;
+                if (displayValue === "0" && this.id === "zero") return;
                 const num = this.textContent;
+                if (operations.length > 0 && isNewNumber) lastOperation = operations[operations.length - 1];
                 if (isNewNumber) {
                     displayValue = num;
                     isNewNumber = false;
                     hasDecimal = false;
                 } else displayValue += num;
                 display.textContent = shortenDecimal(displayValue, DECIMAL_PLACES);
-                lastOperation = operations[operations.length - 1];
             }
 
             // called when the lastOperation is either multiply or divide
@@ -142,7 +144,7 @@
                 if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
                 else operands.push(displayValue);
                 operations.push(button.id);
-                lastNumber = operands[operands.length-1];
+                if (operands.length > 0) lastNumber = operands[operands.length-1];
                 isNewNumber = true;
             }
 
@@ -188,6 +190,19 @@
                 display.textContent = displayValue;
             }
 
+            const erase = function() {
+                if (isNewNumber || displayValue === "0") return;
+                if (displayValue.length === 1) {
+                    displayValue = "0";
+                    isNewNumber = true;
+                } else {
+                    if (displayValue.substring(displayValue.length-1) === ".") hasDecimal = false;
+                    displayValue = displayValue.substr(0,displayValue.length-1);
+                    if (displayValue === "0") isNewNumber = true;
+                }
+                display.textContent = displayValue;
+            }
+
             numberButtons.forEach((button) => {
                 button.addEventListener("click", populateDisplay);
             });
@@ -200,6 +215,8 @@
                 displayValue = "0";
                 reset();
             });
+
+            backspace.addEventListener("click", erase);
 
             equals.addEventListener("click", calculate);
 
