@@ -67,8 +67,8 @@
             <button class="number" id="two">2</button>
             <button class="number" id="three">3</button>
             <button class="operator" id="subtract">&minus;</button>
-            <button class="number" id="zero">0</button>
             <button id="decimal">&sdot;</button>
+            <button class="number" id="zero">0</button>
             <button id="backspace">&#9003</button>
             <button class="operator" id="add">+</button>
             <button id="clear">AC</button>
@@ -116,9 +116,8 @@
                 return Math.round(n * Math.pow(10, places)) / Math.pow(10, places);
             }
 
-            const populateDisplay = function() {
-                if (displayValue === "0" && this.id === "zero") return;
-                const num = this.textContent;
+            const populateDisplay = function(num) {
+                if (displayValue === "0" && num == 0) return;
                 if (operations.length > 0 && isNewNumber) lastOperation = operations[operations.length - 1];
                 if (isNewNumber) {
                     displayValue = num;
@@ -135,15 +134,15 @@
                 operations.pop();
             }
 
-            const addOperator = function(button) {
+            const addOperator = function(operation) {
                 if (lastNumber == displayValue) {
                         operations.pop();
-                        operations.push(button.id);
+                        operations.push(operation);
                         return;
                 }
                 if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
                 else operands.push(displayValue);
-                operations.push(button.id);
+                operations.push(operation);
                 if (operands.length > 0) lastNumber = operands[operands.length-1];
                 isNewNumber = true;
             }
@@ -204,11 +203,11 @@
             }
 
             numberButtons.forEach((button) => {
-                button.addEventListener("click", populateDisplay);
+                button.addEventListener("click", () => { populateDisplay(button.textContent) });
             });
 
             operatorButtons.forEach((button) => {
-                button.addEventListener("click", () => { addOperator(button); })
+                button.addEventListener("click", () => { addOperator(button.id); })
             });
 
             clear.addEventListener("click", () => {
@@ -221,6 +220,21 @@
             equals.addEventListener("click", calculate);
 
             decimal.addEventListener("click", addDecimal);
+
+            window.addEventListener("keydown", (event) => {
+                const key = event.key;
+                if (!isNaN(key)) populateDisplay(key);
+                switch (key) {
+                    case "Backspace": erase(); break;
+                    case "Enter":
+                    case "=": calculate(); break;
+                    case "+": addOperator("add"); break;
+                    case "-": addOperator("subtract"); break;
+                    case "*": addOperator("multiply"); break;
+                    case "/": addOperator("divide"); break;
+                    case ".": addDecimal(); break;
+                }
+            });
         </script>
     </body>
 </html>
