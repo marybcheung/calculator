@@ -22,6 +22,8 @@
                 font-size: 18px;
                 background-color:rgb(172, 172, 172);
                 color: white;
+                outline: none;
+                transition: all 0.2s ease;
             }
 
             button:hover {
@@ -50,6 +52,14 @@
             .operator {
                 background-color: rgb(119, 150, 253);
             }
+
+            .blue-button-selected {
+                background-color:rgb(91, 128, 248);
+            }
+
+            .grey-button-selected {
+                background-color:rgb(153, 153, 153);
+            }
         </style>
     </head>
     <body>
@@ -75,6 +85,7 @@
             <button id="equals">=</button>
         </div>
         <script>
+            const buttons = document.querySelectorAll("button");
             const numberButtons = document.querySelectorAll(".number");
             const operatorButtons = document.querySelectorAll(".operator");
             const equals = document.querySelector("#equals");
@@ -83,6 +94,7 @@
             const decimal = document.querySelector("#decimal");
             const backspace = document.querySelector("#backspace");
             const DECIMAL_PLACES = 8;
+            const numMap = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
             let operations = [];
             let operands = [];
             let displayValue = "0";
@@ -117,6 +129,8 @@
             }
 
             const populateDisplay = function(num) {
+                const button = document.querySelector(`button[id="${numMap[num]}"]`);
+                button.classList.add("grey-button-selected");
                 if (displayValue === "0" && num == 0) return;
                 if (operations.length > 0 && isNewNumber) lastOperation = operations[operations.length - 1];
                 if (isNewNumber) {
@@ -135,6 +149,8 @@
             }
 
             const addOperator = function(operation) {
+                const button = document.querySelector(`button[id="${operation}"]`);
+                button.classList.add("blue-button-selected");
                 if (lastNumber == displayValue) {
                         operations.pop();
                         operations.push(operation);
@@ -167,6 +183,7 @@
             }
 
             const calculate = function() {
+                equals.classList.add("grey-button-selected");
                 if (lastOperation === "multiply" || lastOperation === "divide") {
                     combineOperands();
                 } else operands.push(displayValue);
@@ -177,6 +194,7 @@
             }
 
             const addDecimal = function() {
+                decimal.classList.add("grey-button-selected");
                 if (isNewNumber) {
                     displayValue = "0.";
                     hasDecimal = true;
@@ -190,6 +208,7 @@
             }
 
             const erase = function() {
+                backspace.classList.add("grey-button-selected");
                 if (isNewNumber || displayValue === "0") return;
                 if (displayValue.length === 1) {
                     displayValue = "0";
@@ -201,16 +220,26 @@
                 }
                 display.textContent = displayValue;
             }
+            
+            const removeTransition = function() {
+                if (this.classList.contains("blue-button-selected")) this.classList.remove("blue-button-selected");
+                if (this.classList.contains("grey-button-selected")) this.classList.remove("grey-button-selected");
+            }
+
+            buttons.forEach((button) => {
+                button.addEventListener("transitionend", removeTransition);
+            });
 
             numberButtons.forEach((button) => {
-                button.addEventListener("click", () => { populateDisplay(button.textContent) });
+                button.addEventListener("click", () => { populateDisplay(button.textContent); });
             });
 
             operatorButtons.forEach((button) => {
-                button.addEventListener("click", () => { addOperator(button.id); })
+                button.addEventListener("click", () => { addOperator(button.id); });
             });
 
             clear.addEventListener("click", () => {
+                clear.classList.add("grey-button-selected");
                 displayValue = "0";
                 reset();
             });
