@@ -39,7 +39,7 @@
                 background-color:grey;
                 text-align: right;
                 font-size: 32px;
-                padding: 15px 25px;
+                padding: 30px 10px 10px 10px;
                 vertical-align: middle;
                 color: white;
                 letter-spacing: 1px;
@@ -130,7 +130,7 @@
 
             const populateDisplay = function(num) {
                 const button = document.querySelector(`button[id="${numMap[num]}"]`);
-                button.classList.add("grey-button-selected");
+                button.classList.toggle("grey-button-selected");
                 if (displayValue === "0" && num == 0) return;
                 if (operations.length > 0 && isNewNumber) lastOperation = operations[operations.length - 1];
                 if (isNewNumber) {
@@ -150,11 +150,11 @@
 
             const addOperator = function(operation) {
                 const button = document.querySelector(`button[id="${operation}"]`);
-                button.classList.add("blue-button-selected");
-                if (lastNumber == displayValue) {
-                        operations.pop();
-                        operations.push(operation);
-                        return;
+                button.classList.toggle("blue-button-selected");
+                if (isNewNumber) {
+                    operations.pop();
+                    operations.push(operation);
+                    return;
                 }
                 if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
                 else operands.push(displayValue);
@@ -183,7 +183,7 @@
             }
 
             const calculate = function() {
-                equals.classList.add("grey-button-selected");
+                equals.classList.toggle("grey-button-selected");
                 if (lastOperation === "multiply" || lastOperation === "divide") {
                     combineOperands();
                 } else operands.push(displayValue);
@@ -194,7 +194,7 @@
             }
 
             const addDecimal = function() {
-                decimal.classList.add("grey-button-selected");
+                decimal.classList.toggle("grey-button-selected");
                 if (isNewNumber) {
                     displayValue = "0.";
                     hasDecimal = true;
@@ -208,7 +208,7 @@
             }
 
             const erase = function() {
-                backspace.classList.add("grey-button-selected");
+                backspace.classList.toggle("grey-button-selected");
                 if (isNewNumber || displayValue === "0") return;
                 if (displayValue.length === 1) {
                     displayValue = "0";
@@ -222,8 +222,8 @@
             }
             
             const removeTransition = function() {
-                if (this.classList.contains("blue-button-selected")) this.classList.remove("blue-button-selected");
-                if (this.classList.contains("grey-button-selected")) this.classList.remove("grey-button-selected");
+                if (this.classList.contains("blue-button-selected")) this.classList.toggle("blue-button-selected");
+                if (this.classList.contains("grey-button-selected")) this.classList.toggle("grey-button-selected");
             }
 
             buttons.forEach((button) => {
@@ -239,7 +239,7 @@
             });
 
             clear.addEventListener("click", () => {
-                clear.classList.add("grey-button-selected");
+                clear.classList.toggle("grey-button-selected");
                 displayValue = "0";
                 reset();
             });
