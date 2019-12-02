@@ -152,8 +152,6 @@
                 button.classList.toggle("blue-button-selected");
                 if (isNewNumber) {
                     operations.pop();
-                    operations.push(operation);
-                    return;
                 }
                 if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
                 else operands.push(displayValue);
