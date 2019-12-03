@@ -184,6 +184,7 @@
                 if (lastOperation === "multiply" || lastOperation === "divide") {
                     combineOperands();
                 } else operands.push(displayValue);
+                if (operands.length === 0) return;
                 displayValue = operands.reduce((acc, curr) => {
                     return acc = operate(operations.shift(), acc, curr);
                 });
