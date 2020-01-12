@@ -102,25 +102,27 @@
             let lastNumber;
             let lastOperation;
 
-            const add = function(x, y) {
-                return Number(x) + Number(y);
-            }
+            const Mathy = {
+                add: function(x, y) {
+                    return Number(x) + Number(y);
+                },
 
-            const subtract = function(x, y) {
-                return Number(x) - Number(y);
-            }
+                subtract: function(x, y) {
+                    return Number(x) - Number(y);
+                },
 
-            const multiply = function(x, y) {
-                return Number(x) * Number(y);
-            }
+                multiply: function(x, y) {
+                    return Number(x) * Number(y);
+                },
 
-            const divide = function(x, y) {
-                if (y == 0) {
-                    newNumber = true;
-                    hasDecimal = false;
-                    return "ERROR";
-                } 
-                return Number(x) / Number(y);
+                divide: function(x, y) {
+                    if (y == 0) {
+                        newNumber = true;
+                        hasDecimal = false;
+                        return "ERROR";
+                    } 
+                    return Number(x) / Number(y);
+                }
             }
 
             const shortenDecimal = function(n, places) {
@@ -150,9 +152,7 @@
             const addOperator = function(operation) {
                 const button = document.querySelector(`button[id="${operation}"]`);
                 button.classList.toggle("blue-button-selected");
-                if (isNewNumber) {
-                    operations.pop();
-                }
+                if (isNewNumber) operations.pop();
                 if (lastOperation === "multiply" || lastOperation === "divide") combineOperands();
                 else operands.push(displayValue);
                 operations.push(operation);
@@ -171,12 +171,7 @@
             }
 
             const operate = function(operator, x, y) {
-                switch (operator) {
-                    case "add": return add(x, y);
-                    case "subtract": return subtract(x, y);
-                    case "multiply": return multiply(x, y);
-                    case "divide": return divide(x, y);
-                }
+                return Mathy[operator](x , y);
             }
 
             const calculate = function() {
