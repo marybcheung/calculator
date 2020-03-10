@@ -9,8 +9,16 @@
                 font-family: Arial, Helvetica, sans-serif;
             }
 
+            .calculator-body {
+                padding: 15px;
+                width:min-content;
+                background-color: rgb(70, 102, 206);
+                margin: 0 auto;
+                border-radius: 10px;
+            }
+
             .wrapper {
-                width: 300px;
+                width: min-content;
                 display: grid;
                 grid-template-columns: 72px 72px 72px 72px;
                 grid-gap: 5px;
@@ -35,7 +43,7 @@
 
             #display {
                 grid-column: 1 / 5;
-                background-color:grey;
+                background-color:rgb(158, 158, 158);
                 text-align: right;
                 font-size: 32px;
                 padding: 30px 10px 10px 10px;
@@ -62,26 +70,28 @@
         </style>
     </head>
     <body>
-        <div class="wrapper">
-            <div id="display">0</div>
-            <button class="number" id="seven">7</button>
-            <button class="number" id="eight">8</button>
-            <button class="number" id="nine">9</button>
-            <button class="operator" id="divide">&divide;</button>
-            <button class="number" id="four">4</button>
-            <button class="number" id="five">5</button>
-            <button class="number" id="six">6</button>
-            <button class="operator" id="multiply">&#215;</button>
-            <button class="number" id="one">1</button>
-            <button class="number" id="two">2</button>
-            <button class="number" id="three">3</button>
-            <button class="operator" id="subtract">&minus;</button>
-            <button id="decimal">&sdot;</button>
-            <button class="number" id="zero">0</button>
-            <button id="backspace">&#9003</button>
-            <button class="operator" id="add">+</button>
-            <button id="clear">AC</button>
-            <button id="equals">=</button>
+        <div class="calculator-body">
+            <div class="wrapper">
+                <div id="display">0</div>
+                <button class="number" id="seven">7</button>
+                <button class="number" id="eight">8</button>
+                <button class="number" id="nine">9</button>
+                <button class="operator" id="divide">&divide;</button>
+                <button class="number" id="four">4</button>
+                <button class="number" id="five">5</button>
+                <button class="number" id="six">6</button>
+                <button class="operator" id="multiply">&#215;</button>
+                <button class="number" id="one">1</button>
+                <button class="number" id="two">2</button>
+                <button class="number" id="three">3</button>
+                <button class="operator" id="subtract">&minus;</button>
+                <button id="decimal">&sdot;</button>
+                <button class="number" id="zero">0</button>
+                <button id="backspace">&#9003</button>
+                <button class="operator" id="add">+</button>
+                <button id="clear">AC</button>
+                <button id="equals">=</button>
+            </div>
         </div>
         <script>
             const buttons = document.querySelectorAll("button");
